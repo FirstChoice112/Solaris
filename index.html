@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solaris</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="sun__container">
+      <div class="sun planet" data-planet-name="Sun">
+      </div>
+    </div>
+    <div class="text__container">
+      <div class="text">
+        <h1 class="header">SOLSYSTEMET</h1>
+        <h2 class="solaris">SOLARIS</h2>
+      </div>
+      <section class="planet__section">
+        <div class="merkurius planet" data-planet-name="Merkurius"></div>
+        <div class="venus planet" data-planet-name="Venus"></div>
+        <div class="earth planet" data-planet-name="Jorden"></div>
+        <div class="mars planet" data-planet-name="Mars"></div>
+        <div class="jupiter planet" data-planet-name="Jupiter"></div>
+        <div class="saturnus__container">
+          <div class="saturnus planet" data-planet-name="Saturnus"></div>
+          <div class="saturnus_ring" data-planet-name="Sarturnus"></div>
+        </div>
+        <div class="uranus planet" data-planet-name="Uranus"></div>
+        <div class="neptunus planet" data-planet-name="Neptunus"></div>
+      </section>
+    </div>
+  </div>
+  <div id="planet__content" class="planet__wrapper">
+    <div class="stars"></div>
+    <div class="planet__container">
+      <div id="rendered__planet" class="planet__sideView"></div>
+    </div>
+    <div class="info">
+      <h1 id="planet__header" class="header"></h1>
+      <h2 id="planet__latin" class="latin"></h2>
+      <p id="planet__information" class="information__text"></p>
+      <div class="line"></div>
+      <div class="information__bar">
+        <div class="quick__info">
+          <p class="thick__info">OMKRETS</p>
+          <p id="circumference" class="thin__text"></p>
+          <BR></BR>
+          <p class="thick__info">KM FRÅN SOLEN</p>
+          <p id="distance" class="thin__text"></p>
+        </div>
+        <div class="quick__info__second">
+          <p class="thick__info">MAX TEMPERATUR</p>
+          <p id="max__temperature" class="thin__text"></p>
+          <BR></BR>
+          <p class="thick__info">MIN TEMPERATUR</p>
+          <p id="min__temperature" class="thin__text"></p>
+        </div>
+      </div>
+      <div class="line"></div>
+      <div class="last__info">
+        <p class="thick__info">MÅNAR</p>
+        <p id="moons" class="thin__text"></p>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
