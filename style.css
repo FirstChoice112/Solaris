@@ -14,6 +14,7 @@
   width: 100%;
 }
 .text {
+  display: block;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -22,6 +23,7 @@
   margin-left: auto;
 }
 .header {
+  display: block;
   display: flex;
   justify-content: flex-start;
   color: white;
@@ -35,16 +37,15 @@
 }
 .sun__container {
   overflow: hidden;
-  height: 85rem;
-  width: 85rem;
+  height: 75rem;
+  width: 75rem;
 }
 .sun {
   background: #ffd029;
-  height: 95rem;
-  width: 95rem;
+  height: 90rem;
+  width: 90rem;
   border-radius: 50%;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  left: -85rem;
+  left: -80rem;
   box-shadow: 0 0 10px rgba(255, 255, 255, 15);
 }
 .sun:hover {
@@ -94,14 +95,15 @@
   align-self: flex-end;
 }
 .planet__section {
-  width: 75rem;
+  width: 85rem;
   height: 15rem;
   display: flex;
   margin: auto;
   justify-content: space-around;
+  gap: 5rem;
   align-items: center;
   position: fixed;
-  top: 40rem;
+  top: 45rem;
   left: 17rem;
 }
 .planet {
@@ -129,8 +131,8 @@
   background: #ef5f5f;
 }
 .jupiter {
-  width: 12rem;
-  height: 12rem;
+  width: 13rem;
+  height: 13rem;
   background: #e29468;
 }
 .saturnus {
@@ -196,19 +198,18 @@
 }
 .planet__container {
   overflow: hidden;
-  height: 80rem;
-  width: 80rem;
-  margin-top: 5rem;
-  margin-right: -4rem;
+  height: 85rem;
+  width: 75rem;
 }
 .planet__sideView {
   position: relative;
   background: rgb(66, 142, 212);
-  height: 80rem;
-  width: 80rem;
+  height: 90rem;
+  width: 90rem;
   border-radius: 50%;
-  left: -70rem;
+  left: -80rem;
   z-index: 1;
+  top: 7rem;
 }
 .planet__sideView::before,
 .planet__sideView::after {
@@ -238,6 +239,7 @@
   margin-right: 35rem;
   justify-content: flex-end;
   display: flex;
+  align-self: center;
 }
 
 .latin {
@@ -342,8 +344,20 @@
     opacity: 0.5;
   }
 }
-/********************************@media Querys*******************************/
-@media screen and (max-width: 1447px) {
+/*******************************@media Querys*******************************/
+@media screen and (max-width: 1547px) {
+  .planet__section {
+    width: 60rem;
+    height: 15rem;
+    display: flex;
+    margin: auto;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    gap: 0;
+    top: 45rem;
+    left: 6rem;
+  }
   .planets {
     width: 40rem;
     height: 15rem;
@@ -358,7 +372,6 @@
     height: 95rem;
     width: 95rem;
     border-radius: 50%;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     position: relative;
     left: -90rem;
     box-shadow: 0 0 10px rgba(255, 255, 255, 15);
@@ -375,10 +388,10 @@
   .planet__sideView {
     position: relative;
     background: rgb(66, 142, 212);
-    height: 70rem;
-    width: 70rem;
+    height: 95rem;
+    width: 95rem;
     border-radius: 50%;
-    left: -60rem;
+    left: -90rem;
     z-index: 1;
   }
 }

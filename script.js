@@ -1,133 +1,77 @@
+// SOLARIS: Jag började med att skapa två stycken HTML sidor som jag strukturerade upp och stylade med css. När det var gjort slog jag ihop dom och sade ID'n för att styra dem med JavaScript. Därefter började jag att bygga upp olika functions. Jag hade från start stjärnorna gjorda i css med linear-gradient men uppdaterade den senare till en js-function. Har en @mediaQuery på 1547px (när neptunus försvinner) som minskar solen och avståndet mellan planeterna, detsamma gäller för den renderade sidan.
+//När jag gjorde star wars uppgiften gjorde jag en jätte-function som gick över hela sidan, här har jag försökt separera alla functions och avsluta med en 'huvud'-function som kallar på det övriga. -Johan Skoog
+
+//*******************PSEUDOKOD**********************************/
 // 1. Skapa HTML och CSS struktur för båda sidorna.
 // 2. Hover effekt för alla planeter med namnet.
-// 3. API, Get/Post request. Namn.namnGrekiskt.infoText.Omkrets.KMfrånSolen.MaxTemperatur.MinTemperatur.Månar.
-// 4. Skapa functions för att få informationen
-// 5. Skapa functions för DOM att rendera API informationen ovanför på en ny sida.
-// 6. Rendera stjärnsystem i sida 2 med API informationen.
+// 3. API, Get/Post request, hitta nyckel och hämta.
+// 4. Skapa functions för att få informationen renderad.
+// 5. Skapa functions för att rendera API informationen ovanför på en ny sida.
+// 6. Rendera stjärnsystem i sida 2 med API planet informationen.
 
-// Tisdag
-// 1. Fixa en function som renderar och namger id'n HTML taggarna i renderade sidan.? GitHub först!
-// 4. Gå igenom JavaScript
-// 5. Ladda upp på Github
-// 6. Öva fram en presentation
-// 7. Plocka ur alla variabeldeklarationer och lägg dem längst upp på sidan
+/********************Deklaration för API************************/
+const apiKeysUrl =
+  "https://n5n3eiyjb0.execute-api.eu-north-1.amazonaws.com/keys";
+const apiBodiesUrl =
+  "https://n5n3eiyjb0.execute-api.eu-north-1.amazonaws.com/bodies";
 
-/********************Hämta API nyckeln************************/
+/******************** Hämta API nyckeln ************************/
+//Gör en HTTP POST request till en specifik URL, i detta fall att hämta data.key. POST används för att skicka data till en server och skapa en ny resurs.
+
 async function myApi() {
   try {
-    const response = await fetch(
-      "https://n5n3eiyjb0.execute-api.eu-north-1.amazonaws.com/keys",
-      {
-        //Gör en HTTP POST request till en specifik URL. POST används för att skicka data till en server och skapa en ny resurs.
-        method: "POST",
-      }
-    ); //Om requesten inte är bra, ge mig ett error
+    const response = await fetch(apiKeysUrl, {
+      method: "POST",
+    });
     if (!response.ok) {
-      throw new Error(
-        `Error fetching the motherfucking API. status: ${response.status}`
-      );
-    } //Om requesten är bra, gör om svaret till en JSON fil
+      throw new Error(`Error fetching the API. status: ${response.status}`);
+    }
     const data = await response.json();
-    return data.key; //Retunera API nyckeln från JSON datan
+    return data.key;
   } catch (error) {
-    //Om det uppstår error när jag försöker hämta nyckeln kommer det ut här.
     console.error("Error during the API request:", error);
     throw error;
   }
 }
 
-/********************Med nyckeln, hämta info************************/
-myApi() //Kalla på function för Nyckeln
-  .then((result) => console.log(result)) //När promiset är löst, logga resultat eller error.
-  .catch((error) => console.error(error));
+/******************** Hämta information om planeterna *********/
+//GET request till API med fetch. GET används för att hämta data från en specificerad 'resurs', lägger här in den funna API nyckel 'x-zocom' i requesten. Definiera API URL för att hämta information om planeterna.
 
-//Function för att plocka ut information
 async function getInfoFunction(planetId) {
   try {
-    const apiKey = await myApi(); //Vänta på promise att hämta API nyckel
-    const apiUrl = //Definiera API URL för att hämta information om planeterna
-      "https://n5n3eiyjb0.execute-api.eu-north-1.amazonaws.com/bodies";
+    const apiKey = await myApi();
+    const apiUrl = apiBodiesUrl;
     const response = await fetch(apiUrl, {
-      //GET request till API med fetch. GET används för att hämta data från en specifik resurs.
       method: "GET",
-      headers: { "x-zocom": apiKey }, //Lägger in vår funna API nyckel i requesten
+      headers: { "x-zocom": apiKey },
     });
 
     if (!response.ok) {
-      //Loggar fel i response status
-      throw new Error(
-        `Error during the motherfucking request. Status: ${response.status}`
-      );
+      throw new Error(`Error during the request. Status: ${response.status}`);
     }
-    //Om responsen är ok, översätt till JSON
     const data = await response.json();
-    console.log("Received data from API:", data);
-    //Ta information om specifika planeter genom planetId
     const planetInfo = data.bodies[planetId];
-    console.log("Selected planetInfo:", planetInfo);
-    //Returnerar information om vald planet
     return planetInfo;
-    // Loggar eventuella fel i try blocket.
   } catch (error) {
-    console.error("General motherfucking Error:", error);
+    console.error("General Error:", error);
     throw error;
   }
 }
 
-// Click event för planeter, väntar tills DOMen är laddat innan function går in
-document.addEventListener("DOMContentLoaded", function () {
-  //Refererar till ID på planeten från sidan
-  const rendered__planet = document.getElementById("rendered__planet");
-  //Refererar till classer på planeterna
-  const planets = document.querySelectorAll(
-    ".sun, .merkurius, .venus, .earth, .mars, .jupiter, .saturnus, .uranus, .neptunus"
-  );
-  //Loopa igenom varje planet elementen i index ordning och lägger till en click/eventlistener
-  planets.forEach((planet, index) => {
-    planet.addEventListener("click", async function (event) {
-      try {
-        event.stopPropagation(); //Förhindrar eventet från att öka i DOM hierkin. Stoppar andra eventListeners från att gå in.
+/******** Function för att gömma -planetInfo- ******************/
+//Döljer planet__content när man öppnar sidan.
 
-        //Kallar på function renderPlanetInformation
-        const planetInfo = await getInfoFunction(index);
-        renderplanet__information(planetInfo);
-        //Kallar på functionen changeEnlargedPlanetColor för att byta färg
-        changerendered__planetColor(rendered__planet, planet);
-        //Kalla på function att byta sida
-        togglePage();
-      } catch (error) {
-        console.error("Error fetching planet information:", error);
-      }
-    });
-  });
-  //Lägger till click/ eventListener för hela documentet
-  document.addEventListener("click", function () {
-    //Byt sidan när du klickar var som helst i documentet.
-    togglePage();
-  });
+document.addEventListener("DOMContentLoaded", function () {
+  var rendered__Content = document.getElementById("planet__content");
+  if (rendered__Content) {
+    rendered__Content.style.display = "none";
+  }
 });
 
-//Function för att planeten ska ändra färg när den renderas
-function changerendered__planetColor(rendered__planet, planet) {
-  const colorClass = planet.classList[0];
-  //Hämta färgen från planet classen
-  const planetColor = getComputedStyle(
-    document.querySelector(`.${colorClass}`)
-  ).backgroundColor;
-  //Använd färgen på enlargedPlanet
-  rendered__planet.style.backgroundColor = planetColor;
+/******************** Rendera informationen ************************/
+//Renderar in informationen från GetInfoFunction på rätt ställe.
 
-  //Uppdatera ringarna till planeten
-  const rings = document.querySelectorAll(
-    `.${colorClass}::before, .${colorClass}::after`
-  );
-  rings.forEach((ring) => {
-    ring.style.background = planetColor;
-  });
-}
-
-// Function to render planet information
-function renderplanet__information(planetInfo) {
+function renderPlanet__information(planetInfo) {
   if (planetInfo) {
     document.getElementById("planet__header").textContent =
       planetInfo.name || "n/a";
@@ -150,7 +94,25 @@ function renderplanet__information(planetInfo) {
     console.error("Invalid planet information:", planetInfo);
   }
 }
-// Toggle page function från Solaris till plaetInfo
+
+/********************Ändra planetfärg************************/
+//Ändrar färgen på planeten som renderas och lägger till 2 ringar.
+
+function changeRendered__planetColor(rendered__planet, planet) {
+  const colorClass = planet.classList[0];
+  const planetColor = getComputedStyle(
+    document.querySelector(`.${colorClass}`)
+  ).backgroundColor;
+  rendered__planet.style.backgroundColor = planetColor;
+  const rings = document.querySelectorAll(
+    `.${colorClass}::before, .${colorClass}::after`
+  );
+  rings.forEach((ring) => {
+    ring.style.background = planetColor;
+  });
+}
+
+/********************Toogle page function************************/
 function togglePage() {
   const wrapper = document.querySelector(".wrapper");
   const planet__wrapper = document.getElementById("planet__content");
@@ -163,11 +125,11 @@ function togglePage() {
     planet__wrapper.style.display = "none";
   }
 }
-getInfoFunction();
 
-/********Stjärnhimel**********/
-const wrapper = document.querySelector(".wrapper3");
-//Rendera 100 stjärnor över hela sidan random.
+/**************************Stjärnhimel**********************************/
+//Genererar 100st random stjärnor på den renderade planet sidan.
+
+const wrapper = document.querySelector(".planet__wrapper");
 for (let i = 0; i < 100; i++) {
   const star = document.createElement("div");
   star.classList.add("stars");
@@ -176,10 +138,29 @@ for (let i = 0; i < 100; i++) {
   wrapper.appendChild(star);
 }
 
-/********Function för att gömma -planetInfo-**********/
+/******************Clickevent som invoverar våra functions******************/
+// Click event för planeter, väntar tills DOMen är laddat innan function går in loopar igenom varje planet elementen i index ordning och lägger till en click/eventlistener. Denna function aktiverar de andra funktionerna.
+
 document.addEventListener("DOMContentLoaded", function () {
-  var html2Content = document.getElementById("planet__content");
-  if (html2Content) {
-    html2Content.style.display = "none";
-  }
+  const rendered__planet = document.getElementById("rendered__planet");
+  const planets = document.querySelectorAll(
+    ".sun, .merkurius, .venus, .earth, .mars, .jupiter, .saturnus, .uranus, .neptunus"
+  );
+
+  planets.forEach((planet, index) => {
+    planet.addEventListener("click", async function (event) {
+      try {
+        event.stopPropagation(); //Förhindrar eventet från att öka i DOM hierkin. Stoppar andra eventListeners från att gå in.
+        const planetInfo = await getInfoFunction(index);
+        renderPlanet__information(planetInfo);
+        changeRendered__planetColor(rendered__planet, planet);
+        togglePage();
+      } catch (error) {
+        console.error("Error fetching planet information:", error);
+      }
+    });
+  });
+  document.addEventListener("click", function () {
+    togglePage();
+  });
 });
